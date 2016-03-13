@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MobileSecuGuard</string>
+    <string name="app_versionCode">1</string>
+    <string name="app_versionName">0.1</string>
+</resources>
