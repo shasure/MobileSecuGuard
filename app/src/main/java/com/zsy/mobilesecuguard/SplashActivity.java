@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.lidroid.xutils.util.LogUtils;
-import com.zsy.mobilesecuguard.chapter01.MyUtils;
+import com.zsy.mobilesecuguard.chapter01.utils.MyUtils;
 import com.zsy.mobilesecuguard.chapter01.VersionUpdateThread;
 
 

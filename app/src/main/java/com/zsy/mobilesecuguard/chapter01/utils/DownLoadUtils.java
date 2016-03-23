@@ -1,4 +1,4 @@
-package com.zsy.mobilesecuguard.chapter01;
+package com.zsy.mobilesecuguard.chapter01.utils;
 
 
 import com.lidroid.xutils.HttpUtils;
@@ -39,7 +39,7 @@ public class DownLoadUtils {
     }
 
 
-    interface DownloadCallBack {
+    public interface DownloadCallBack {
         void onSuccess(ResponseInfo<File> responseInfo);
 
         void onFailure(HttpException e, String s);

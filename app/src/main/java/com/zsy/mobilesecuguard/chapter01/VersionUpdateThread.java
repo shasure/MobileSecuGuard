@@ -17,6 +17,9 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.util.LogUtils;
 import com.zsy.mobilesecuguard.HomeActivity;
 import com.zsy.mobilesecuguard.R;
+import com.zsy.mobilesecuguard.chapter01.entity.VersionEntity;
+import com.zsy.mobilesecuguard.chapter01.utils.DownLoadUtils;
+import com.zsy.mobilesecuguard.chapter01.utils.MyUtils;
 import com.zsy.mobilesecuguard.utils.Configure;
 
 import org.apache.http.HttpEntity;
@@ -72,8 +75,8 @@ public class VersionUpdateThread implements Runnable {
         try {
             LogUtils.d("in getServerVersion");
             HttpClient client = new DefaultHttpClient();
-            HttpConnectionParams.setConnectionTimeout(client.getParams(), 5000);
-            HttpConnectionParams.setSoTimeout(client.getParams(), 5000);
+            HttpConnectionParams.setConnectionTimeout(client.getParams(), 2000);
+            HttpConnectionParams.setSoTimeout(client.getParams(), 2000);
             HttpGet httpGet = new HttpGet(Configure.URL_UPDATEINFO);
             HttpResponse httpRes = client.execute(httpGet);
             if (httpRes.getStatusLine().getStatusCode() == 200) {

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.zsy.mobilesecuguard"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 19
         versionCode 1
         versionName "1.0"
     }
@@ -22,7 +22,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile files('src/libs/httpcore-4.4.1.jar')
+    compile files('libs/httpclient-4.5.2.jar')
+    compile files('libs/httpcore-4.4.4.jar')
     compile files('libs/xUtils-2.5.5.jar')
-    compile files('libs/xUtils-2.6.14.jar')
 }

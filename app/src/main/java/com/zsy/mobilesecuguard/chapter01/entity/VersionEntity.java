@@ -1,4 +1,4 @@
-package com.zsy.mobilesecuguard.chapter01;
+package com.zsy.mobilesecuguard.chapter01.entity;
 
 /**
  * Created by zsy on 2016/3/12.

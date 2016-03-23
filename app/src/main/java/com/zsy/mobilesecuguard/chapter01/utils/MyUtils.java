@@ -1,4 +1,4 @@
-package com.zsy.mobilesecuguard.chapter01;
+package com.zsy.mobilesecuguard.chapter01.utils;
 
 import android.app.Activity;
 import android.content.Context;
