@@ -34,6 +34,16 @@ captures/
 
 # Intellij
 *.iml
+.idea/
 
 # Keystore files
 *.jks
+
+# Eclipse project files
+.classpath
+.project
+
+# others
+ant.properties
+build.xml
+META-INF

@@ -17,7 +17,9 @@ import com.zsy.mobilesecuguard.chapter01.adapter.HomeAdapter;
 import com.zsy.mobilesecuguard.chapter02.LostFindActivity;
 import com.zsy.mobilesecuguard.chapter02.dialogs.InterPasswordDialog;
 import com.zsy.mobilesecuguard.chapter02.dialogs.SetUpPasswordDialog;
+import com.zsy.mobilesecuguard.chapter02.receiver.MyDeviceAdminReceiver;
 import com.zsy.mobilesecuguard.chapter02.utils.MD5Utils;
+import com.zsy.mobilesecuguard.chapter03.SecurityPhoneActivity;
 
 /**
  * Created by zsy on 2016/3/12.
@@ -64,6 +66,7 @@ public class HomeActivity extends Activity {
                         }
                         break;
                     case 1:
+                        startActivity(SecurityPhoneActivity.class);
                         break;
                     case 2:
                         break;
@@ -82,10 +85,10 @@ public class HomeActivity extends Activity {
                 }
             }
         });
-/*        //每次启动HomeActivity都会看看有没有申请设备管理员权限
-        //获取设备管理员
+        //每次启动HomeActivity都会看看有没有申请设备管理员权限
+        //DevicePolicyManager manages policies for one or more DeviceAdminReceiver instances
         policyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
-        //申请权限
+        //获取target policy
         componentName = new ComponentName(this, MyDeviceAdminReceiver.class);
         //判断如果没有权限就申请
         boolean active = policyManager.isAdminActive(componentName);
@@ -95,7 +98,7 @@ public class HomeActivity extends Activity {
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
             intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "获取管理员权限，用于远程锁屏和清除数据");
             startActivity(intent);
-        }*/
+        }
     }
 
     /***

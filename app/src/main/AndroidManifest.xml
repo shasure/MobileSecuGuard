@@ -4,8 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,6 +24,87 @@
         <activity
             android:name=".HomeActivity"
             android:screenOrientation="portrait"/>
+        <!-- 手机防盗 -->
+        <activity
+            android:name=".chapter02.LostFindActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter02.SetUp1Activity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter02.SetUp2Activity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter02.SetUp3Activity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter02.SetUp4Activity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter02.ContactSelectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 通讯卫士 -->
+        <activity
+            android:name=".chapter03.SecurityPhoneActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".chapter03.AddBlackNumberActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+        <!-- 设备超级管理员广播接收者 -->
+        <receiver
+            android:name=".chapter02.receiver.MyDeviceAdminReceiver"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        <!-- Reciver -->
+        <receiver android:name=".chapter02.receiver.SmsLostFindReciver" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".chapter02.receiver.BootCompleteReciever" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <!-- 拦截黑名单信息 -->
+        <receiver android:name=".chapter03.receiver.InterceptSmsReciever" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <!-- 拦截黑名单电话 -->
+        <receiver android:name=".chapter03.receiver.InterceptCallReciever" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
+
+
+        <!-- Service -->
+        <service
+            android:name=".chapter02.service.GPSLocationService"
+            android:persistent="true" >
+        </service>
     </application>
 
 </manifest>

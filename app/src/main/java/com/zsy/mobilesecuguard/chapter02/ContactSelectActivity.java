@@ -73,6 +73,7 @@ public class ContactSelectActivity extends Activity implements OnClickListener {
                 ContactInfo item = (ContactInfo) adapter.getItem(position);
                 Intent intent = new Intent();
                 intent.putExtra("phone", item.phone);
+                intent.putExtra("name", item.name);
                 setResult(0, intent);
                 finish();
             }
