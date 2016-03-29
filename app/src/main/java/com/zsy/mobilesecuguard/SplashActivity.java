@@ -48,15 +48,12 @@ public class SplashActivity extends AppCompatActivity {
                 if (resultCode == RESULT_CANCELED){
                     LogUtils.d("install activity return cancel");
                     startActivity(new Intent(this, HomeActivity.class));
+                    finish();
                 }
                 if (resultCode == RESULT_OK){
                     LogUtils.d("install activity return ok");
-//                    finish();
+                    finish();
                 }
-                break;
-            case 2:         //start homeactivity
-                LogUtils.d("enterhome activity return");
-                finish();
                 break;
         }
     }

@@ -59,7 +59,7 @@ public class VersionUpdateThread implements Runnable {
      * enter homeActivity
      */
     private void enterHome() {
-        handler.sendEmptyMessageAtTime(MESSAGE_ENTERHOME, 2000);
+        handler.sendEmptyMessageAtTime(MESSAGE_ENTERHOME, 60000);
     }
 
     public VersionUpdateThread(String mVersion, Activity context, Handler activityHandler) {
@@ -87,84 +87,95 @@ public class VersionUpdateThread implements Runnable {
                 versionEntity.setVersionName(jsonObject.getString("code"));
                 versionEntity.setDescription(jsonObject.getString("des"));
                 versionEntity.setApkDownloadUrl(jsonObject.getString("apkurl"));
+                Log.i(Configure.TAG, jsonObject.toString());
                 if (!mVersion.equals(versionEntity.getVersionName())) {
                     //diffrent version
                     LogUtils.d("发送message_show_dialog");
                     handler.sendEmptyMessage(MESSAGE_SHOEW_DIALOG);
                 }
             }
+            Log.i(Configure.TAG, "getServerVersion no exceptions occur");
         } catch (JSONException e) {
             handler.sendEmptyMessage(MESSAGE_JSON_EEOR);
-            e.printStackTrace();
+            Log.i(Configure.TAG, e.getMessage());
         } catch (ClientProtocolException e) {
             handler.sendEmptyMessage(MESSAGE_NET_EEOR);
-            e.printStackTrace();
+            Log.i(Configure.TAG, e.getMessage());
         } catch (IOException e) {
             handler.sendEmptyMessage(MESSAGE_IO_EEOR);
-            e.printStackTrace();
+            Log.i(Configure.TAG, e.getMessage());
         }
     }
 
     private void showUpdateDialog(final VersionEntity versionEntity) {
-        //create dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("检查到新版本:" + versionEntity.getVersionName());
-        builder.setMessage(versionEntity.getDescription());
-        builder.setIcon(R.drawable.ic_launcher);
-
-        builder.setPositiveButton("立即升级", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                initProgressDialog();
-                downloadNewApk(versionEntity.getApkDownloadUrl());
-            }
-        });
-
-        builder.setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();   //dismiss() will release the memory of dialog
-                enterHome();
-            }
-        });
-
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                dialog.dismiss();
-                enterHome();
-            }
-        });
-        builder.show();
-    }
-
-    private void initProgressDialog() {
-        mProgressDialog = new ProgressDialog(context);
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                mProgressDialog.setMessage("准备下载...");
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                mProgressDialog.show();
+                //create dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("检查到新版本:" + versionEntity.getVersionName());
+                builder.setMessage(versionEntity.getDescription());
+                builder.setIcon(R.drawable.ic_launcher);
+
+                builder.setPositiveButton("立即升级", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        initProgressDialog();
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                downloadNewApk(versionEntity.getApkDownloadUrl());
+                            }
+                        }.start();
+                    }
+                });
+
+                builder.setNegativeButton("暂不升级", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();   //dismiss() will release the memory of dialog
+                        enterHome();
+                    }
+                });
+
+                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        enterHome();
+                    }
+                });
+                builder.show();
             }
         };
         activityHandler.post(r);
     }
 
+    private void initProgressDialog() {
+        mProgressDialog = new ProgressDialog(context);
+
+        mProgressDialog.setMessage("准备下载...");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.show();
+
+
+    }
+
     private void downloadNewApk(String apkDownloadUrl) {
+        Log.i(Configure.TAG, "before downloadNewApk");
         final String apkLocalUrl = "/mnt/sdcard/MobileSecuGuard2.0.apk";
         DownLoadUtils downLoadUtils = new DownLoadUtils();
         downLoadUtils.downapk(apkDownloadUrl, apkLocalUrl, new DownLoadUtils.DownloadCallBack() {
             @Override
             public void onSuccess(ResponseInfo<File> responseInfo) {
-                mProgressDialog.dismiss();
+                activityHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mProgressDialog.dismiss();
+                    }
+                });
                 LogUtils.d("下载成功");
                 MyUtils.installAPK(context, apkLocalUrl);
-                try {
-                    Looper.myLooper().quit();       //quit loop
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override
@@ -173,11 +184,11 @@ public class VersionUpdateThread implements Runnable {
                     @Override
                     public void run() {
                         mProgressDialog.setMessage("下载失败");
+                        mProgressDialog.dismiss();
                     }
                 };
                 activityHandler.post(r);
                 LogUtils.d("下载失败");
-                mProgressDialog.dismiss();
                 enterHome();
             }
 
@@ -202,7 +213,13 @@ public class VersionUpdateThread implements Runnable {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_IO_EEOR:
-                    Toast.makeText(context, "IO Exception", Toast.LENGTH_SHORT).show();
+                    activityHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "IO Exception", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.i(Configure.TAG, "handler MESSAGE_IO_EEOR");
                     enterHome();
                     break;
                 case MESSAGE_JSON_EEOR:
@@ -210,20 +227,27 @@ public class VersionUpdateThread implements Runnable {
                     enterHome();
                     break;
                 case MESSAGE_NET_EEOR:
+                    Log.i(Configure.TAG, "handler MESSAGE_NET_EEOR");
                     Toast.makeText(context, "network exception", Toast.LENGTH_SHORT).show();
                     enterHome();
                     break;
                 case MESSAGE_SHOEW_DIALOG:
                     showUpdateDialog(versionEntity);
+                    try {
+                        Looper.myLooper().quitSafely();       //quit loop
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case MESSAGE_ENTERHOME:
                     Intent intent = new Intent(context, HomeActivity.class);
-                    context.startActivityForResult(intent, 2);
+                    context.startActivity(intent);
                     try {
-                        Looper.myLooper().quit();       //quit loop
-                    } catch (Exception e) {
+                        Looper.myLooper().quitSafely();       //quit loop
+                    } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
+                    context.finish();
                     break;
             }
         }
@@ -235,7 +259,7 @@ public class VersionUpdateThread implements Runnable {
         Looper.prepare();
         handler = new MyHandler();
         LogUtils.d("after new MyHander");
-        //下面两个语句不能颠倒，原因估计是looper里是个for(;;)死循环，要先getServerVersion发送消息，然后loop
+        //下面两个语句不能颠倒，原因是looper里是个for(;;)死循环，要先getServerVersion发送消息，然后loop
         getServerVersion();
         Looper.loop();
     }

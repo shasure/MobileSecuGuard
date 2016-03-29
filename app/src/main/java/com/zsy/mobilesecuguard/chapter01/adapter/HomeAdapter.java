@@ -38,11 +38,11 @@ public class HomeAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
             convertView = View.inflate(context, R.layout.item_home, null);
-            ImageView iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
-            TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-            iv_icon.setImageResource(imageId[position]);
-            tv_name.setText(names[position]);
         }
+        ImageView iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
+        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+        iv_icon.setImageResource(imageId[position]);
+        tv_name.setText(names[position]);
         return convertView;
     }
 

@@ -18,8 +18,15 @@ import com.zsy.mobilesecuguard.chapter02.LostFindActivity;
 import com.zsy.mobilesecuguard.chapter02.dialogs.InterPasswordDialog;
 import com.zsy.mobilesecuguard.chapter02.dialogs.SetUpPasswordDialog;
 import com.zsy.mobilesecuguard.chapter02.receiver.MyDeviceAdminReceiver;
-import com.zsy.mobilesecuguard.chapter02.utils.MD5Utils;
+import com.zsy.mobilesecuguard.chapter05.VirusScanActivity;
+import com.zsy.mobilesecuguard.chapter06.CacheClearListActivity;
+import com.zsy.mobilesecuguard.chapter07.ProcessManagerActivity;
+import com.zsy.mobilesecuguard.chapter08.TrafficMonitoringActivity;
+import com.zsy.mobilesecuguard.chapter09.AdvancedToolsActivity;
+import com.zsy.mobilesecuguard.chapter10.SettingsActivity;
+import com.zsy.mobilesecuguard.utils.MD5Utils;
 import com.zsy.mobilesecuguard.chapter03.SecurityPhoneActivity;
+import com.zsy.mobilesecuguard.chapter04.AppManagerActivity;
 
 /**
  * Created by zsy on 2016/3/12.
@@ -69,18 +76,25 @@ public class HomeActivity extends Activity {
                         startActivity(SecurityPhoneActivity.class);
                         break;
                     case 2:
+                        startActivity(AppManagerActivity.class);
                         break;
                     case 3:
+                        startActivity(VirusScanActivity.class);
                         break;
                     case 4:
+                        startActivity(CacheClearListActivity.class);
                         break;
                     case 5:
+                        startActivity(ProcessManagerActivity.class);
                         break;
                     case 6:
+                        startActivity(TrafficMonitoringActivity.class);
                         break;
                     case 7:
+                        startActivity(AdvancedToolsActivity.class);
                         break;
                     case 8:
+                        startActivity(SettingsActivity.class);
                         break;
                 }
             }

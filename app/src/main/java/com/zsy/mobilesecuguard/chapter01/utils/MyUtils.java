@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Looper;
 
 import com.lidroid.xutils.util.LogUtils;
 import com.zsy.mobilesecuguard.utils.PathUtils;
@@ -18,6 +19,7 @@ import java.io.File;
 public class MyUtils {
     /**
      * get app local version. in Gradle versionCode and versionName attributes are in build.gradle not manifest
+     *
      * @param context
      * @return
      */
